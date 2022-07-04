@@ -1,5 +1,25 @@
 from google.cloud import storage
 
+ADD_KEYWORDS = ["demo",
+                "test",
+                "dev",
+                "mobile",
+                "web",
+                "app",
+                "application",
+                "api",
+                "mobileapp",
+                "staging",
+                "prod",
+                "production",
+                "stage",
+                "mock",
+                "sd",
+                "live",
+                "uat",
+                "qa",
+                "user",
+                "sand"]
 
 with open('S&P top 500.txt', 'r') as f:
     lines = f.readlines()
