@@ -10,6 +10,6 @@ with open('S&P top 500.txt', 'r') as f:
         bucket = s3.Bucket(bucket_name)
         try:
             print(len(list(bucket.objects.all())))
-            print(bucket_name)
+            print(bucket_name+".s3.amazonaws.com")
         except Exception:
             pass
