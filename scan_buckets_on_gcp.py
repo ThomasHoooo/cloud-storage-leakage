@@ -1,35 +1,46 @@
 from google.cloud import storage
+import concurrent.futures
 
 ADD_KEYWORDS = ["demo",
                 "test",
                 "dev",
-                "mobile",
                 "web",
                 "app",
                 "application",
                 "api",
-                "mobileapp",
                 "staging",
                 "prod",
                 "production",
                 "stage",
                 "mock",
-                "sd",
                 "live",
-                "uat",
-                "qa",
-                "user",
-                "sand"]
+                "user"]
 
-with open('S&P top 500.txt', 'r') as f:
-    lines = f.readlines()
-    for line in lines:
-        storage_client = storage.Client.create_anonymous_client()
-        bucket_name = line.strip("\n").split(".")[0]
+def check_bucket_open(bucket_name):
+    try:
         for blob in list(storage_client.bucket(bucket_name).list_blobs()):
-            try:
-                curr = blob.name
-                print(bucket_name+".blob.core.windows.net")
-                break
-            except Exception:
-                pass
+            curr = blob.name
+            f.write(bucket_name+".storage.googleapis.com\n")
+            print(bucket_name)
+            break
+    except Exception as e:
+        pass
+
+storage_client = storage.Client.create_anonymous_client()
+final_results = []
+
+with open('alexa_top_10k.txt', 'r') as r, open('alexa_top_10k_gcp_open_buckets.txt', 'w+') as f:
+    with concurrent.futures.ThreadPoolExecutor(10) as executor:
+        for line in r:
+            bucket_name = line.strip("\n").split(",")[1].split(".")[0]
+            executor.submit(check_bucket_open, bucket_name)
+            for keyword in ADD_KEYWORDS:
+                enumerated_buckets = [f"{bucket_name}-{keyword}", 
+                                    f"{bucket_name}{keyword}",
+                                    f"{keyword}{bucket_name}",
+                                    f"{keyword}.{bucket_name}",
+                                    f"{keyword}-{bucket_name}",
+                                    ]
+                executor.map(check_bucket_open, enumerated_buckets)
+
+                
