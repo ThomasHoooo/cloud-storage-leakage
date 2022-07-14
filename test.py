@@ -1,7 +1,8 @@
-from google.cloud import storage
-storage_client = storage.Client.create_anonymous_client()
-bucket_name = "testunity"
-for blob in list(storage_client.bucket(bucket_name).list_blobs()):
-    curr = blob.name
-    print(bucket_name)
-    break
+from unittest import result
+
+
+with open('alexa_top_10k.txt', 'r') as r:
+    results = set()
+    for line in r:
+            results.add(line.strip("\n").split(",")[1].removeprefix("www.").split(".")[0])
+    print(len(results))

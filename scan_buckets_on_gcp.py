@@ -18,6 +18,7 @@ ADD_KEYWORDS = ["demo",
 
 def check_bucket_open(bucket_name):
     try:
+        print(bucket_name)
         for blob in list(storage_client.bucket(bucket_name).list_blobs()):
             curr = blob.name
             f.write(bucket_name+".storage.googleapis.com\n")
