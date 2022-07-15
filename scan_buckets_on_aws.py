@@ -1,6 +1,8 @@
 import boto3
-from botocore.handlers import disable_signing
-import concurrent.futures
+from botocore import UNSIGNED
+from botocore.client import Config
+import requests
+import concurrent
 
 ADD_KEYWORDS = ["demo",
                 "test",
@@ -18,24 +20,23 @@ ADD_KEYWORDS = ["demo",
                 "user"]
 
 def check_bucket_open(bucket_name):
-    bucket = s3.Bucket(bucket_name)
     try:
-        for object in bucket.objects.all():
-            f.write(bucket.name + ".s3.amazonaws.com\n")
-            print(bucket.name)
+        print(bucket_name)
+        for key in client.list_objects(Bucket=bucket_name)['Contents']:
+            print(bucket_name+ ".s3.amazonaws.com")
+            f.write(bucket_name + ".s3.amazonaws.com\n")
             break
     except Exception:
         pass
 
-s3 = boto3.resource('s3')
-s3.meta.client.meta.events.register('choose-signer.s3.*', disable_signing)
-public_buckets = []
+requests.urllib3.disable_warnings()
+client = boto3.client('s3', config=Config(signature_version=UNSIGNED), verify=False)
 
 with open('alexa_top_10k.txt', 'r') as r, open('alexa_top_10k_aws_open_buckets.txt', 'w+') as f:
     lines = r.readlines()
     with concurrent.futures.ThreadPoolExecutor(20) as executor:
         for line in lines:
-            website_name = line.strip("\n").split(",")[1].split(".")[0]
+            website_name = line.strip("\n").split(",")[1].removeprefix("www.").split(".")[0]
             executor.submit(check_bucket_open, website_name)
             for keyword in ADD_KEYWORDS:
                 enumerated_buckets = [f"{website_name}-{keyword}", 
