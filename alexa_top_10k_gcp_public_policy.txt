@@ -4,8 +4,8 @@ hh-demo public iam policy
 aoltest public iam policy
 testnews public iam policy
 user-files public iam policy
-zju-test public iam policy
 livemint public iam policy
+zju-test public iam policy
 sctest public iam policy
 freetest public iam policy
 test-java public iam policy
@@ -30,7 +30,7 @@ devshell public iam policy
 scetest public iam policy
 hamad public iam policy
 aoltest public iam policy
-testnews public iam policy
 user-files public iam policy
+testnews public iam policy
 app-liga public iam policy
 translatedemo public iam policy

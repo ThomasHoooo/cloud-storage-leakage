@@ -4,12 +4,7 @@ import concurrent.futures
 def check_bucket_open(bucket_name):
     print(bucket_name)
     try:
-        storage_client.bucket(bucket_name).get()
-        f.write(bucket_name+" public metadata\n")
-    except:
-        pass
-    try:
-        storage_client.bucket(bucket_name).get_iam_policy(requested_policy_version=3)
+        print(storage_client.bucket(bucket_name).get_iam_policy())
         f.write(bucket_name+" public iam policy\n")
     except:
         pass
